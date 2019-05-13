@@ -11,4 +11,4 @@ Supported comparisons algothrims are:
 
 Example:  
 
-![](BLPDiffer.Tests\example-output.png)
+![](https://github.com/barncastle/BLPDiffer/blob/master/BLPDiffer.Tests/example-output.png)
