@@ -22,14 +22,14 @@ namespace BLPDiffer
         }
 
 
-        public Bitmap Compare(string previous, string current)
+        public Bitmap Compare(string previous, string current, OutputStyle style)
         {
             using (var pStream = File.OpenRead(previous))
             using (var cStream = File.OpenRead(current))
-                return Compare(new BlpFile(pStream), new BlpFile(cStream));
+                return Compare(new BlpFile(pStream), new BlpFile(cStream), style);
         }
 
-        public Bitmap Compare(BlpFile previous, BlpFile current)
+        public Bitmap Compare(BlpFile previous, BlpFile current, OutputStyle style)
         {
             if (previous == null)
                 throw new ArgumentNullException(nameof(previous));
@@ -49,9 +49,21 @@ namespace BLPDiffer
                 var differenceMap = differ.Analyse(pImg, cImg);
                 var labels = labeler.Label(differenceMap);
                 var boundingBoxes = boxer.CreateBoundingBoxes(labels);
-                return GenerateOutput(cImg, boundingBoxes);
+
+                switch(style)
+                {
+                    case OutputStyle.SideBySide:
+                        return GenerateSideBySide(pImg, cImg, boundingBoxes, false);
+                    case OutputStyle.FullSideBySide:
+                        return GenerateSideBySide(pImg, cImg, boundingBoxes, true);
+                    case OutputStyle.DifferenceMask:
+                        return GenerateOutput(new Bitmap(cImg.Width, cImg.Height), boundingBoxes);
+                    default:
+                        return GenerateOutput(cImg, boundingBoxes);
+                }
             }
         }
+
 
         private Bitmap GenerateOutput(Bitmap current, IEnumerable<Rectangle> boundingBoxes)
         {
@@ -79,6 +91,28 @@ namespace BLPDiffer
             }
 
             return bmp;
+        }
+
+        private Bitmap GenerateSideBySide(Bitmap previous, Bitmap current, IEnumerable<Rectangle> boundingBoxes, bool full)
+        {
+            using (var highlighted = GenerateOutput(current, boundingBoxes))
+            {
+                int imgcount = full ? 3 : 2;
+                int width = (previous.Width + _settings.ImageSpacing) * imgcount - _settings.ImageSpacing;
+
+                Bitmap bmp = new Bitmap(width, previous.Height);
+
+                using (var g = Graphics.FromImage(bmp))
+                {
+                    if (full)
+                        g.DrawImage(current, previous.Width + _settings.ImageSpacing, 0);
+
+                    g.DrawImage(previous, 0, 0);
+                    g.DrawImage(highlighted, bmp.Width - highlighted.Width, 0);                    
+                }
+
+                return bmp;
+            }
         }
     }
 }

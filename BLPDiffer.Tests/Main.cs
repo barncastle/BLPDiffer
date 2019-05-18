@@ -21,7 +21,7 @@ namespace BLPDiffer.Tests
 
             var blpComparer = new BLPComparer(AnalyserType.CIEDE2000, settings);
 
-            using (var bmp = blpComparer.Compare("2832258_old.blp", "2832258_new.blp"))
+            using (var bmp = blpComparer.Compare("2832258_old.blp", "2832258_new.blp", OutputStyle.SideBySide))
                 bmp.Save("test.png", ImageFormat.Png);
         }
     }

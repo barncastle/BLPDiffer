@@ -25,6 +25,10 @@ namespace BLPDiffer
         /// Controls the bounding box style
         /// </summary>
         public BoundingBoxDrawMode BoundingBoxMode { get; set; } = BoundingBoxDrawMode.Outline;
+        /// <summary>
+        /// Space between images when using a SideBySide output style
+        /// </summary>
+        public int ImageSpacing { get; set; } = 5;
 
 
         internal void Validate(AnalyserType analyser)
@@ -37,6 +41,8 @@ namespace BLPDiffer
                 throw new ArgumentException(nameof(BoundingBoxPadding));
             if (BoundingBoxColour == null)
                 throw new ArgumentException(nameof(BoundingBoxColour));
+            if (ImageSpacing <= 0)
+                throw new ArgumentException(nameof(ImageSpacing));
         }
     }
 }
