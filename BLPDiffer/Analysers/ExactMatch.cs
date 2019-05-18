@@ -18,7 +18,6 @@ namespace BLPDiffer.Analysers
             {
                 byte* pScan0 = (byte*)pData.Scan0, cScan0 = (byte*)cData.Scan0;
 
-
                 for (int x = 0; x < width; x++)
                 {
                     for (int y = 0; y < height; y++)
