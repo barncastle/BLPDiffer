@@ -3,7 +3,7 @@
 Compares two BLPs and produces a bitmap highlighting the differences between them.  
 See the `BLPDiffer.Tests` for an example.
 
-Supported comparisons algothrims are:
+Supported comparison algothrims are:
 - Exact pixel matching
 - CIE76
 - CIE94
@@ -11,4 +11,4 @@ Supported comparisons algothrims are:
 
 Example:  
 
-![](BLPDiffer.Tests\example-output.png)
+![](https://github.com/barncastle/BLPDiffer/blob/master/BLPDiffer.Tests/example-output.png)
